@@ -5,7 +5,8 @@ const {app, BrowserWindow} = require('electron')
 let mainWindow
 
 // Create a new BrowserWindow when 'app' is ready
-function createWindow () {
+function createWindow() {
+    console.log("App is ready")
     mainWindow = new BrowserWindow({
         width:  1000,
         height: 800,
@@ -30,6 +31,22 @@ function createWindow () {
 
 // Electron app is ready
 app.on('ready', createWindow)
+
+app.on('browser-window-blur', () => {
+    console.log("Window is not focused")
+    const browserWindowBlur = require('./browser_window_blur.js')
+    browserWindowBlur.quitApp(app)
+    
+})
+
+app.on('browser-window-focus', () => {
+    console.log("Window is focused")
+})
+
+app.on("before-quit", e => {
+    console.log("App is quitting...")
+    // e.preventDefault()
+})
 
 // Quit when all windows are closed - (Not macOS- Darwin)
 app.on('window-all-closed', () => {
