@@ -1,4 +1,5 @@
-const {app, BrowserWindow} = require('electron')
+const { app, BrowserWindow } = require('electron')
+const browserWindowBlur = require('./main/browser_window_blur.js')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automacally when the JavaScript objects is garbage collected.
@@ -14,14 +15,21 @@ function createWindow() {
             nodeIntegration: true,
             enableRemoteModule: true,
             contextIsolation: false
-        }
+        },
+        show: false,
+        
     })
 
     //Load index.html into the new BrowserWindow
     mainWindow.loadFile('index.html')
+    // mainWindow.loadURL('http://google.com')
 
     // Open DevTools  - Remove for PRODUCTION
     mainWindow.webContents.openDevTools()
+
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show()
+    })
 
     //Listen for window being closed
     mainWindow.on('close', () => {
@@ -30,11 +38,18 @@ function createWindow() {
 }
 
 // Electron app is ready
-app.on('ready', createWindow)
+app.on('ready', () => {
+    console.log("App is ready")
+    console.log(app.getPath('desktop'))
+    console.log(app.getPath('documents'))
+    console.log(app.getPath('music'))
+    console.log(app.getPath('temp'))
+    console.log(app.getPath('userData'))
+    createWindow()
+})
 
 app.on('browser-window-blur', () => {
     console.log("Window is not focused")
-    const browserWindowBlur = require('./browser_window_blur.js')
     browserWindowBlur.quitApp(app)
     
 })

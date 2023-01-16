@@ -1,0 +1,30 @@
+body {
+    background-color: #f5f5f5;
+    background-size: cover;
+    font-family: "Manrope", sans-serif;
+    font-size: 22px;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.root-blue {
+    /* background-image: url(../assets/img/wallpaper.jpg); */
+    /* background-color: #2453e9; */
+    color: #fff;
+}
+.logo {
+    width: 100%;
+}
+
+.form-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}

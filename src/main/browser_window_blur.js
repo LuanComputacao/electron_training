@@ -4,7 +4,7 @@ function quitApp(app) {
     setTimeout(() => {
         console.log(`Quitting app by idleing for ${idleTime}ms`)
         console.log(app)
-        app.quit()
+        // app.quit()
     }, idleTime)
 }
 
