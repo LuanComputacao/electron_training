@@ -1,4 +1,4 @@
-const { app, BrowserWindow, webContents, session } = require('electron')
+const { app, BrowserWindow, webContents, session, dialog } = require('electron')
 const windowStateKeeper = require('electron-window-state')
 const browserWindowBlur = require('./main/browser_window_blur.js')
 const conf = require('./config.js')
@@ -37,19 +37,41 @@ function createWindow () {
   mainWindow.loadFile('index.html')
   const wc = mainWindow.webContents
 
-  // wc.on('did-finish-load', () => {
-  //   console.log('did-finish-load')
-  // })
+  wc.on('did-finish-load', () => {
+    console.log('did-finish-load')
+  })
 
-  // wc.on('dom-ready', () => {
-  //   console.log('DOM Ready...')
-  // })
+  wc.on('dom-ready', () => {
+    console.log('DOM Ready...')
+  })
+
   wc.setWindowOpenHandler((details) => {
     console.log(`Creating new window for: ${details.url}`)
     return { action: 'deny' }
   })
   // Open DevTools  - Remove for PRODUCTION
-  mainWindow.webContents.openDevTools()
+  wc.openDevTools()
+
+  wc.on('did-finish-load', () => {
+    // dialog.showOpenDialog(mainWindow, {
+    //   buttonLabel: 'Select a photo',
+    //   defaultPath: app.getPath('home'),
+    //   properties: ['multiSelections', 'createDirectory', 'openFile', 'openDirectory']
+    // }).then(result => {
+    //   console.log(result)
+    // })
+
+    const answers = ['Yes', 'No', 'Maybe']
+
+    // dialog.showMessageBox({
+    //   title: 'Message Box',
+    //   message: 'Please select an option',
+    //   detail: 'Message details',
+    //   buttons: answers
+    // }).then(result => {
+    //   console.log(`User selected: ${answers[result.response]}`)
+    // })
+  })
 
   wc.on('before-input-event', (event, input) => {
     console.log(`${input.type} ${input.key}`)
