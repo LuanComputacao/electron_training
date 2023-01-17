@@ -6,7 +6,7 @@ module.exports = {
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false
-    },
+    }
     // show: false
 
   },
