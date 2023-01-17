@@ -12,11 +12,13 @@ body {
     justify-content: center;
     height: 100vh;
 }
+
 .root-blue {
-    /* background-image: url(../assets/img/wallpaper.jpg); */
-    /* background-color: #2453e9; */
+    background-image: url(../assets/img/wallpaper.jpg);
+    background-color: #2453e9;
     color: #fff;
 }
+
 .logo {
     width: 100%;
 }
