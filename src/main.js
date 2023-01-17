@@ -1,4 +1,4 @@
-const { app, BrowserWindow, webContents } = require('electron')
+const { app, BrowserWindow, webContents, session } = require('electron')
 const windowStateKeeper = require('electron-window-state')
 const browserWindowBlur = require('./main/browser_window_blur.js')
 const conf = require('./config.js')
@@ -17,7 +17,13 @@ function createWindow () {
     y: winState.y
   })
 
+  const ses = mainWindow.webContents.session
+  console.log(ses)
+  console.log(session.defaultSession)
+  console.log(session.defaultSession.getUserAgent())
+
   winState.manage(mainWindow)
+
   // Load index.html into the new BrowserWindow
   mainWindow.loadFile('index.html')
   const wc = mainWindow.webContents
