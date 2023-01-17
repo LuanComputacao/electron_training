@@ -7,7 +7,7 @@ module.exports = {
       enableRemoteModule: true,
       contextIsolation: false
     },
-    show: false
+    // show: false
 
   },
   idleTime: 100
