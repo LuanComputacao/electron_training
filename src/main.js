@@ -9,18 +9,27 @@ const conf = require('./config.js')
 // Create a new BrowserWindow when 'app' is ready
 function createWindow () {
   console.log('App is ready')
+
   const winState = windowStateKeeper(conf.browserWindow)
+  console.log('winState', winState)
+
+  const customSession = session.fromPartition('persist:custom')
+
   let mainWindow = new BrowserWindow({
-    width: winState.width,
-    height: winState.height,
+    ...conf.browserWindow,
     x: winState.x,
-    y: winState.y
+    y: winState.y,
+    webPreferences: {
+      ...winState.webPreferences,
+      partition: 'persist:custom'
+    }
   })
 
   const ses = mainWindow.webContents.session
   console.log(ses)
   console.log(session.defaultSession)
   console.log(session.defaultSession.getUserAgent())
+  console.log(Object.is(ses, customSession))
 
   winState.manage(mainWindow)
 
@@ -35,13 +44,12 @@ function createWindow () {
   // wc.on('dom-ready', () => {
   //   console.log('DOM Ready...')
   // })
-
   wc.setWindowOpenHandler((details) => {
     console.log(`Creating new window for: ${details.url}`)
     return { action: 'deny' }
   })
   // Open DevTools  - Remove for PRODUCTION
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   wc.on('before-input-event', (event, input) => {
     console.log(`${input.type} ${input.key}`)
