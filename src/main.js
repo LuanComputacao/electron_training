@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron')
+const windowStateKeeper = require('electron-window-state')
 const browserWindowBlur = require('./main/browser_window_blur.js')
 const conf = require('./config.js')
 
@@ -9,17 +10,17 @@ let mainWindow; let secondaryWindow
 // Create a new BrowserWindow when 'app' is ready
 function createWindow () {
   console.log('App is ready')
-  mainWindow = new BrowserWindow(conf.browserWindow)
-  secondaryWindow = new BrowserWindow({
-    ...conf.browserWindow,
-    width: 200,
-    height: 800,
-    parent: mainWindow
+  const winState = windowStateKeeper(conf.browserWindow)
+  mainWindow = new BrowserWindow({
+    width: winState.width,
+    height: winState.height,
+    x: winState.x,
+    y: winState.y
   })
 
+  winState.manage(mainWindow)
   // Load index.html into the new BrowserWindow
   mainWindow.loadFile('index.html')
-  secondaryWindow.loadFile('index.html')
   // mainWindow.loadURL('http://google.com')
 
   // Open DevTools  - Remove for PRODUCTION
@@ -27,14 +28,10 @@ function createWindow () {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
-    secondaryWindow.show()
   })
 
   // Listen for window being closed
   mainWindow.on('close', () => {
-    mainWindow = null
-  })
-  secondaryWindow.on('close', () => {
     mainWindow = null
   })
 }
