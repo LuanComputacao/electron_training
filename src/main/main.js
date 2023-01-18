@@ -1,17 +1,18 @@
 const electron = require('electron')
 const { app, BrowserWindow, session, Menu, MenuItem } = electron
 const windowStateKeeper = require('electron-window-state')
-const browserWindowBlur = require('../main/browserWindowBlur.js')
+const browserWindowBlur = require('./browserWindowBlur.js')
 const conf = require('../config.js')
+const Session = require('./Session.js')
 
-require('../main/ipc')
+require('./ipc')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automacally when the JavaScript objects is garbage collected.
 
 let mainWindow
 
-const mainMenu = Menu.buildFromTemplate(require('../main/mainMenu'))
+const mainMenu = Menu.buildFromTemplate(require('./mainMenu'))
 
 // Create a new BrowserWindow when 'app' is ready
 function createWindow () {
@@ -20,19 +21,13 @@ function createWindow () {
   const winState = windowStateKeeper(conf.browserWindow)
   console.log('winState', winState)
 
-  const customSession = session.fromPartition('persist:custom')
-
   mainWindow = new BrowserWindow({
     ...conf.browserWindow,
     x: winState.x,
     y: winState.y
   })
 
-  const ses = mainWindow.webContents.session
-  // console.log(ses)
-  // console.log(session.defaultSession)
-  // console.log(session.defaultSession.getUserAgent())
-  // console.log(Object.is(ses, customSession))
+  Session.main(mainWindow)
 
   winState.manage(mainWindow)
 
