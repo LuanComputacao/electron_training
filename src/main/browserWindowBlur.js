@@ -2,8 +2,8 @@ const idleTime = require('../config').idleTime
 
 function quitApp (app) {
   setTimeout(() => {
-    console.log(`Quitting app by idleing for ${idleTime}ms`)
-    // App.quit()
+    console.log(`Quitting app by idling for ${idleTime}ms`)
+    // app.quit()
   }, idleTime)
 }
 

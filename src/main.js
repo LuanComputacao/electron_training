@@ -1,10 +1,18 @@
-const { app, BrowserWindow, webContents, session, dialog } = require('electron')
+const { app, BrowserWindow, session, Menu, MenuItem } = require('electron')
 const windowStateKeeper = require('electron-window-state')
-const browserWindowBlur = require('./main/browser_window_blur.js')
+const browserWindowBlur = require('./main/browserWindowBlur.js')
 const conf = require('./config.js')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automacally when the JavaScript objects is garbage collected.
+
+let mainWindow
+
+const mainMenu = Menu.buildFromTemplate(require('./main/mainMenu'))
+
+const menuItem1 = new MenuItem({ lavel: 'Electron' })
+
+mainMenu.append(menuItem1)
 
 // Create a new BrowserWindow when 'app' is ready
 function createWindow () {
@@ -15,7 +23,7 @@ function createWindow () {
 
   const customSession = session.fromPartition('persist:custom')
 
-  let mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     ...conf.browserWindow,
     x: winState.x,
     y: winState.y,
@@ -61,7 +69,7 @@ function createWindow () {
     //   console.log(result)
     // })
 
-    const answers = ['Yes', 'No', 'Maybe']
+    // const answers = ['Yes', 'No', 'Maybe']
 
     // dialog.showMessageBox({
     //   title: 'Message Box',
@@ -93,6 +101,8 @@ function createWindow () {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
   })
+
+  Menu.setApplicationMenu(mainMenu)
 
   // Listen for window being closed
   mainWindow.on('close', () => {
