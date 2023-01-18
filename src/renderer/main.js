@@ -1,17 +1,17 @@
 const electron = require('electron')
 const { app, BrowserWindow, session, Menu, MenuItem } = electron
 const windowStateKeeper = require('electron-window-state')
-const browserWindowBlur = require('./main/browserWindowBlur.js')
-const conf = require('./config.js')
+const browserWindowBlur = require('../main/browserWindowBlur.js')
+const conf = require('../config.js')
 
-require('./main/ipc/index')
+require('../main/ipc')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automacally when the JavaScript objects is garbage collected.
 
 let mainWindow
 
-const mainMenu = Menu.buildFromTemplate(require('./main/mainMenu'))
+const mainMenu = Menu.buildFromTemplate(require('../main/mainMenu'))
 
 // Create a new BrowserWindow when 'app' is ready
 function createWindow () {
