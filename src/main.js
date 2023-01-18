@@ -23,18 +23,14 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     ...conf.browserWindow,
     x: winState.x,
-    y: winState.y,
-    webPreferences: {
-      ...winState.webPreferences,
-      partition: 'persist:custom'
-    }
+    y: winState.y
   })
 
   const ses = mainWindow.webContents.session
-  console.log(ses)
-  console.log(session.defaultSession)
-  console.log(session.defaultSession.getUserAgent())
-  console.log(Object.is(ses, customSession))
+  // console.log(ses)
+  // console.log(session.defaultSession)
+  // console.log(session.defaultSession.getUserAgent())
+  // console.log(Object.is(ses, customSession))
 
   winState.manage(mainWindow)
 
@@ -55,7 +51,7 @@ function createWindow () {
     return { action: 'deny' }
   })
   // Open DevTools  - Remove for PRODUCTION
-  // wc.openDevTools()
+  wc.openDevTools()
 
   wc.on('did-finish-load', () => {
     // dialog.showOpenDialog(mainWindow, {
