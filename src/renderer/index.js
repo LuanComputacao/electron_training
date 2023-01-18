@@ -8,3 +8,7 @@ const { webFrame } = require('electron')
 console.log('webFrame', webFrame)
 console.log('zoom factor', webFrame.getZoomFactor())
 console.log('zoom level', webFrame.getZoomLevel())
+
+module.exports = {
+  Zoom: require('./Zoom')
+}
