@@ -1,4 +1,5 @@
-const { app, BrowserWindow, session, Menu, MenuItem } = require('electron')
+const electron = require('electron')
+const { app, BrowserWindow, session, Menu, MenuItem } = electron
 const windowStateKeeper = require('electron-window-state')
 const browserWindowBlur = require('./main/browserWindowBlur.js')
 const conf = require('./config.js')
@@ -9,10 +10,6 @@ const conf = require('./config.js')
 let mainWindow
 
 const mainMenu = Menu.buildFromTemplate(require('./main/mainMenu'))
-
-const menuItem1 = new MenuItem({ lavel: 'Electron' })
-
-mainMenu.append(menuItem1)
 
 // Create a new BrowserWindow when 'app' is ready
 function createWindow () {
@@ -94,8 +91,7 @@ function createWindow () {
 
   wc.on('context-menu', (e, params) => {
     console.log('context-menu', params)
-    const seletedText = params.selectionText
-    wc.executeJavaScript(`alert('${seletedText}')`)
+    e.preventDefault()
   })
 
   mainWindow.once('ready-to-show', () => {
@@ -107,6 +103,14 @@ function createWindow () {
   // Listen for window being closed
   mainWindow.on('close', () => {
     mainWindow = null
+  })
+
+  electron.powerMonitor.on('resume', () => {
+    if (!mainWindow) createWindow()
+  })
+
+  electron.powerMonitor.on('suspend', () => {
+    console.log('Saving some data')
   })
 }
 
