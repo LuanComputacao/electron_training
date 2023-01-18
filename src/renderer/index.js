@@ -11,7 +11,7 @@ console.log('zoom factor', webFrame.getZoomFactor())
 console.log('zoom level', webFrame.getZoomLevel())
 
 Ipc.desktopCapturer()
-Ipc.screnShot(
+Ipc.screenShot(
   { types: ['screen'] }
 )
 

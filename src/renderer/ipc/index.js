@@ -14,7 +14,8 @@ module.exports = {
       console.log(sources)
     })
   },
-  screnShot: function (opts) {
+
+  screenShot: function (opts) {
     document.getElementById('screenshot-btn').addEventListener('click', () => {
       desktopCapturer.getSources(opts).then(async sources => {
         document.getElementById('screenshot').src = sources[0].thumbnail.toDataURL()
