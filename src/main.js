@@ -4,6 +4,8 @@ const windowStateKeeper = require('electron-window-state')
 const browserWindowBlur = require('./main/browserWindowBlur.js')
 const conf = require('./config.js')
 
+require('./main/ipc/index')
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automacally when the JavaScript objects is garbage collected.
 

@@ -4,10 +4,13 @@
  */
 
 const { webFrame } = require('electron')
+const Ipc = require('./ipc/index')
 
 console.log('webFrame', webFrame)
 console.log('zoom factor', webFrame.getZoomFactor())
 console.log('zoom level', webFrame.getZoomLevel())
+
+Ipc.desktopCapturer()
 
 module.exports = {
   Zoom: require('./Zoom')
