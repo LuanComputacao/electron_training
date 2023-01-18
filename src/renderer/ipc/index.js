@@ -13,5 +13,12 @@ module.exports = {
     desktopCapturer.getSources({ types: ['window', 'screen'] }).then(async sources => {
       console.log(sources)
     })
+  },
+  screnShot: function (opts) {
+    document.getElementById('screenshot-btn').addEventListener('click', () => {
+      desktopCapturer.getSources(opts).then(async sources => {
+        document.getElementById('screenshot').src = sources[0].thumbnail.toDataURL()
+      })
+    })
   }
 }

@@ -11,6 +11,9 @@ console.log('zoom factor', webFrame.getZoomFactor())
 console.log('zoom level', webFrame.getZoomLevel())
 
 Ipc.desktopCapturer()
+Ipc.screnShot(
+  { types: ['screen'] }
+)
 
 module.exports = {
   Zoom: require('./Zoom')
