@@ -55,7 +55,7 @@ function createWindow () {
     return { action: 'deny' }
   })
   // Open DevTools  - Remove for PRODUCTION
-  wc.openDevTools()
+  // wc.openDevTools()
 
   wc.on('did-finish-load', () => {
     // dialog.showOpenDialog(mainWindow, {
