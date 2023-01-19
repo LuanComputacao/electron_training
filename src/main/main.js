@@ -1,9 +1,11 @@
 const electron = require('electron')
-const { app, BrowserWindow, session, Menu, MenuItem } = electron
+const { app, BrowserWindow, Menu, ipcMain } = electron
 const windowStateKeeper = require('electron-window-state')
-const browserWindowBlur = require('./browserWindowBlur.js')
 const conf = require('../config.js')
 const Session = require('./Session.js')
+const WebContents = require('./browser_window/WebContents.js')
+const PowerMonitor = require('./browser_window/PowerMonitor.js')
+const BrowserWindowHandler = require('./Session')
 
 require('./ipc')
 
@@ -24,90 +26,53 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     ...conf.browserWindow,
     x: winState.x,
-    y: winState.y
+    y: winState.y,
+    show: false
   })
 
   Session.main(mainWindow)
-
   winState.manage(mainWindow)
 
-  // Load index.html into the new BrowserWindow
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+  // MAIN WINDOW
+  // - - - - - - - - - - - - - - - - - - - - - - - -
   mainWindow.loadFile('index.html')
-  const wc = mainWindow.webContents
-
-  wc.on('did-finish-load', () => {
-    console.log('did-finish-load')
-  })
-
-  wc.on('dom-ready', () => {
-    console.log('DOM Ready...')
-  })
-
-  wc.setWindowOpenHandler((details) => {
-    console.log(`Creating new window for: ${details.url}`)
-    return { action: 'deny' }
-  })
-  // Open DevTools  - Remove for PRODUCTION
-  wc.openDevTools()
-
-  wc.on('did-finish-load', () => {
-    // dialog.showOpenDialog(mainWindow, {
-    //   buttonLabel: 'Select a photo',
-    //   defaultPath: app.getPath('home'),
-    //   properties: ['multiSelections', 'createDirectory', 'openFile', 'openDirectory']
-    // }).then(result => {
-    //   console.log(result)
-    // })
-
-    // const answers = ['Yes', 'No', 'Maybe']
-
-    // dialog.showMessageBox({
-    //   title: 'Message Box',
-    //   message: 'Please select an option',
-    //   detail: 'Message details',
-    //   buttons: answers
-    // }).then(result => {
-    //   console.log(`User selected: ${answers[result.response]}`)
-    // })
-  })
-
-  wc.on('before-input-event', (event, input) => {
-    console.log(`${input.type} ${input.key}`)
-    if (input.key === 'F12' && input.type === 'keyUp') {
-      if (wc.isDevToolsOpened()) {
-        wc.closeDevTools()
-      } else {
-        wc.openDevTools()
-      }
-    }
-  })
-
-  wc.on('context-menu', (e, params) => {
-    console.log('context-menu', params)
-    e.preventDefault()
-  })
-
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
   })
-
-  Menu.setApplicationMenu(mainMenu)
-
-  // Listen for window being closed
   mainWindow.on('close', () => {
     mainWindow = null
   })
+  // - - - - - - - - - - - - - - - - - - - - - - - -
 
-  electron.powerMonitor.on('resume', () => {
-    if (!mainWindow) createWindow()
-  })
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+  // WEB CONTENTS HANDLERS
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+  // WebContents.onDidFinishLoad(mainWindow)
+  WebContents.onDomReady(mainWindow)
+  WebContents.onBeforeInputEvent(mainWindow)
+  WebContents.onContextMenu(mainWindow)
+  WebContents.setWindowOpenHandler(mainWindow)
+  WebContents.devTools(mainWindow)
+  // - - - - - - - - - - - - - - - - - - - - - - - -
 
-  electron.powerMonitor.on('suspend', () => {
-    console.log('Saving some data')
-  })
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+  // POWER MONITOR HANDLERS
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+  PowerMonitor.onResume(mainWindow)
+  PowerMonitor.onSuspend(mainWindow)
+
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+  // MENU HANDLERS
+  // - - - - - - - - - - - - - - - - - - - - - - - -
+  Menu.setApplicationMenu(mainMenu)
 }
 
-// Electron app is ready
+ipcMain.on('channel1', (e, props) => {
+  console.log('channel1', props)
+  e.sender.send('channel1-response', 'Message received on channel1. Thank you!')
+})
+
 app.on('ready', () => {
   console.log('App is ready')
   console.log(app.getPath('desktop'))
@@ -118,33 +83,10 @@ app.on('ready', () => {
   createWindow()
 })
 
-app.on('browser-window-blur', () => {
-  console.log('Window is not focused')
-  browserWindowBlur.quitApp(app)
-})
+// Electron app is ready
+BrowserWindowHandler.main()
 
-app.on('browser-window-focus', () => {
-  console.log('Window is focused')
-})
-
-app.on('before-quit', e => {
-  console.log('App is quitting...')
-  // E.preventDefault()
-})
-
-// Quit when all windows are closed - (Not macOS- Darwin)
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('before-input-event', (event, input) => {
-  console.log(`${input.type} ${input.key}`)
-})
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
+module.exports = {
+  mainWindow,
+  createWindow
+}

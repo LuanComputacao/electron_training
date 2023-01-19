@@ -1,10 +1,11 @@
 module.exports = {
+  env: 'development',
   browserWindow: {
     width: 1000,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      enableRemoteModule: true,
+      // enableRemoteModule: true,
       contextIsolation: false
     },
     maximize: false

@@ -21,5 +21,17 @@ module.exports = {
         document.getElementById('screenshot').src = sources[0].thumbnail.toDataURL()
       })
     })
+  },
+
+  talk: function () {
+    document.getElementById('talk-btn').addEventListener('click', e => {
+      ipcRenderer.send('channel1', 'Hello from main window, channel1')
+    })
+  },
+
+  talkResponse: function () {
+    ipcRenderer.on('channel1-response', (e, props) => {
+      console.log('channel1-response', props)
+    })
   }
 }
