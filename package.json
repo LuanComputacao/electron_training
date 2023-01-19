@@ -2,7 +2,7 @@
   "name": "s1_app1",
   "version": "1.0.0",
   "description": "Complete Electron Course: section1 app1",
-  "main": "main.js",
+  "main": "src/main/main.js",
   "scripts": {
     "start": "electron .",
     "dev": "nodemon --exec electron .",
