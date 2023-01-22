@@ -5,6 +5,7 @@
 
 const { webFrame } = require('electron')
 const Ipc = require('./ipc/index')
+const NativeImageHandler = require('./NativeImageHandler')
 
 module.exports = {
   main: function () {
@@ -21,5 +22,23 @@ module.exports = {
 
     Ipc.talk()
     Ipc.talkResponse()
+    this.nativeImage()
+  },
+
+  nativeImage: function () {
+    document.getElementById('convert-to-png')
+      .addEventListener('click', (e) => {
+        NativeImageHandler.toPng(e)
+      })
+
+    document.getElementById('convert-to-jpg')
+      .addEventListener('click', e => {
+        NativeImageHandler.toJpg(e)
+      })
+
+    document.getElementById('convert-to-tag')
+      .addEventListener('click', e => {
+        NativeImageHandler.toTag(document.getElementById('splash-image-preview'))
+      })
   }
 }

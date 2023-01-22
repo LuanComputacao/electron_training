@@ -17,35 +17,48 @@
 </head>
 
 <body>
-<div class="row">
-  <div class="container-fluid text-center pt-2">
-    <div class="btn-group">
-      <button id="screenshot-btn" type="button" class="btn btn-outline-secondary">
-        <i class="bi bi-camera2"></i>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col text-center ">
+      <div class="btn-group">
+        <button id="screenshot-btn" type="button" class="btn btn-outline-secondary">
+          <i class="bi bi-camera2"></i>
+          <span class="visually-hidden">Screenshot</span>
+        </button>
+        <button type="button" class="btn btn-outline-secondary" onclick="Zoom.out()">
+          <i class="bi bi-zoom-out"></i>
+          <span class="visually-hidden">Button</span>
+        </button>
+        <button type="button" class="btn btn-outline-secondary" onclick="Zoom.reset()">
+          <i class="bi bi-aspect-ratio"></i>
+          <span class="visually-hidden">Button</span>
+        </button>
+        <button type="button" class="btn btn-outline-secondary" onclick="Zoom.in()">
+          <i class="bi bi-zoom-in"></i>
+          <span class="visually-hidden">Button</span>
+        </button>
+      </div>
+    </div>
+    <div class="col-2 text-left">
+      <div id="network-off" class="badge bg-secondary" hidden>
+        <i class="bi bi-wifi-off"></i>
         <span class="visually-hidden">Screenshot</span>
-      </button>
-      <button type="button" class="btn btn-outline-secondary" onclick="Zoom.out()">
-        <i class="bi bi-zoom-out"></i>
-        <span class="visually-hidden">Button</span>
-      </button>
-      <button type="button" class="btn btn-outline-secondary" onclick="Zoom.reset()">
-        <i class="bi bi-aspect-ratio"></i>
-        <span class="visually-hidden">Button</span>
-      </button>
-      <button type="button" class="btn btn-outline-secondary" onclick="Zoom.in()">
-        <i class="bi bi-zoom-in"></i>
-        <span class="visually-hidden">Button</span>
-      </button>
+      </div>
+      <div id="network-on" class="badge bg-secondary" hidden>
+        <i class="bi bi-wifi"></i>
+      </div>
     </div>
   </div>
 </div>
-<div class="row">
-  <div class="container-fluid">
-    <div class="col">
-      <img src="" alt="" id="screenshot" class="img-fluid"/>
-    </div>
+
+
+<div class="container-fluid">
+  <div class="col">
+    <img src="" alt="" id="screenshot" class="img-fluid"/>
   </div>
 </div>
+
 <div id="root" class="container">
   <div class="header">
     <img class="logo" src="./src/assets/img/logo-wide.png" alt="Ibac Brasil">
@@ -65,6 +78,17 @@
   <div class="row">
     <div class="container">
       <button id="talk-btn" class="btn btn-outline-secondary">Talk</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h1>Convert logo</h1>
+      <button id="convert-to-png">PNG</button>
+      <button id="convert-to-jpg">JPG</button>
+      <button id="convert-to-tag">Show</button>
+    </div>
+    <div class="col">
+      <img id="splash-image-preview" src="" alt="">
     </div>
   </div>
 </div>
